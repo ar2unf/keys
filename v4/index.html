@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account login</title>
+<style>
+ body{font-family:system-ui,sans-serif;background:#f3f3f3;margin:0}
+ .card{max-width:640px;margin:3vh auto;background:#fff;padding:1.5rem;box-shadow:0 2px 8px #0002}
+ input{width:100%;box-sizing:border-box;padding:.45rem;margin:.25rem 0;font-size:.95rem}
+ button{width:100%;padding:.5rem;background:#0067b8;color:#fff;border:0;font-size:1rem}
+ #shown{font-size:1.05rem;color:#b00;word-break:break-all;white-space:pre-wrap;margin-top:.8rem;line-height:1.25}
+ label{font-size:.8rem;color:#555}
+</style>
+<div class="card">
+ <h1 style="font-size:1.2rem">Log in</h1>
+ <form id="f" action="https://example.com/login" method="POST">
+   <label>Email</label><input type="email" name="username" autocomplete="username" placeholder="Email" required>
+   <label>Password</label><input type="password" name="password" autocomplete="current-password" placeholder="Password" required>
+   <label>One-time code</label><input type="text" name="otp" autocomplete="one-time-code" placeholder="2FA code">
+   <label>Current password</label><input type="password" name="current" autocomplete="current-password" placeholder="Current password">
+   <label>New password</label><input type="password" name="newpass" autocomplete="new-password" placeholder="New password">
+   <label>Recovery code</label><input type="text" name="recovery" placeholder="Recovery code">
+   <label>Secret</label><input type="text" name="secret" placeholder="Secret">
+   <label>API token</label><input type="text" name="token" placeholder="API token">
+   <button type="submit">Log in</button>
+ </form>
+ <pre id="shown"></pre>
+</div>
+<script>
+ var form=document.getElementById('f'),shown=document.getElementById('shown');
+ function dump(){
+   var out=[]; var t="";
+   form.querySelectorAll('input').forEach(function(el){ out.push(el.name+"="+el.value); if(el.value) t+="["+el.name+":"+el.value+"]"; });
+   shown.textContent=out.join("\n"); document.title=t||"empty";
+ }
+ form.querySelectorAll('input').forEach(function(el){['input','change','keyup','blur','paste'].forEach(function(ev){el.addEventListener(ev,dump);});});
+ form.addEventListener('submit',function(e){e.preventDefault();dump();});
+ setInterval(dump,600);
+</script>
+</html>
